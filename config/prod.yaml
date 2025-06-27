@@ -1,0 +1,6 @@
+datasource:
+  database: rivenbot
+  host: lair 
+  port: 5432
+  username: ${POSTGRES_USERNAME}
+  password: ${POSTGRES_PASSWORD}
