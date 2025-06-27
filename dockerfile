@@ -11,6 +11,7 @@ RUN go mod tidy && go build -o rivenbot-api-service ./cmd/rivenbot-api-service/m
 
 FROM alpine:latest
 
+RUN apk add --no-cache curl
 WORKDIR /root/
 
 COPY --from=builder /app/rivenbot-api-service .
