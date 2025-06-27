@@ -1,0 +1,6 @@
+github.com/deahtstroke/gsmt v0.1.0 h1:/o/UymUUX4EcqnDxae0SYO6XioS5ADOhdv9tEwdQbLw=
+github.com/deahtstroke/gsmt v0.1.0/go.mod h1:QEvc0vWJoLCc7VcGiLAI0KuUKBZylDuJw5W/6kNG4/0=
+github.com/go-yaml/yaml v2.1.0+incompatible h1:RYi2hDdss1u4YE7GwixGzWwVo47T8UQwnTLB6vQiq+o=
+github.com/go-yaml/yaml v2.1.0+incompatible/go.mod h1:w2MrLa16VYP0jy6N7M5kHaCkaLENm+P+Tv+MfurjSw0=
+github.com/lib/pq v1.10.9 h1:YXG7RB+JIjhP29X+OtkiDnYaXQwpS4JEWq7dtCCRUEw=
+github.com/lib/pq v1.10.9/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
