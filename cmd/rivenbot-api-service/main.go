@@ -3,7 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
 	"os"
 
 	"rivenbot-api-service/pkg/config"
@@ -40,4 +42,14 @@ func main() {
 	if err != nil {
 		log.Panicf("Error applying migrations: %v", err)
 	}
+
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/healthcheck", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		io.WriteString(w, "Ready")
+	})
+
+	log.Printf("Ready to receive requests on port: 8083")
+	log.Fatal(http.ListenAndServe(":8083", mux))
 }
