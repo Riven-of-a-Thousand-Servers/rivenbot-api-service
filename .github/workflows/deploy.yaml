@@ -32,7 +32,7 @@ jobs:
       - name: Determine version
         id: determine_version
         run: |
-          if [ "${GITHUB_EVENT_NAME}" == "create" ] && [ -n "${GITHUB_REF}" ]; then
+          if [ "${GITHUB_EVENT_NAME}" == "push" ] && [ -n "${GITHUB_REF}" ]; then
             # event was triggered by tag, extract version from key
             VERSION=${GITHUB_REF#refs/tags/v}
             echo "$VERSION"
