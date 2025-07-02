@@ -7,7 +7,7 @@ on:
         description: 'Version of the service to deploy'
         required: true
         default: 'latest'
-  create:
+  push:
     tags:
     - "v*.*.*"
 
