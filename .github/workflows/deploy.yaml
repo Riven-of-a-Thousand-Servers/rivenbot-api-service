@@ -35,6 +35,7 @@ jobs:
           if [ "${GITHUB_EVENT_NAME}" == "create" ] && [ -n "${GITHUB_REF}" ]; then
             # event was triggered by tag, extract version from key
             VERSION=${GITHUB_REF#refs/tags/v}
+            echo "$VERSION"
           else
             VERSION="${{ github.event.inputs['service-version'] }}"
           fi
