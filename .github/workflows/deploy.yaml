@@ -22,13 +22,6 @@ jobs:
         with:
           fetch-tags: true
           fetch-depth: 0
-      - name: Debug Actions Github
-        run: |
-          echo "GITHUB_REF=${GITHUB_REF}"
-          echo "GITHUB_EVENT_NAME=${GITHUB_EVENT_NAME}"
-          echo "github.ref=${{ github.ref }}"
-          echo "github.event_name=${{ github.event_name }}"
-          echo "GITHUB_SHA=${GITHUB_SHA}"
       - name: Determine version
         id: determine_version
         run: |
