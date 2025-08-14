@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 
 	"rivenbot-api-service/pkg/config"
@@ -36,8 +37,11 @@ func main() {
 	}
 
 	connString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
-		// url := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		appconfig.Datasource.Username, appconfig.Datasource.Password, appconfig.Datasource.Host, appconfig.Datasource.Port, appconfig.Datasource.Database)
+		url.QueryEscape(appconfig.Datasource.Username),
+		url.QueryEscape(appconfig.Datasource.Password),
+		appconfig.Datasource.Host,
+		appconfig.Datasource.Port,
+		appconfig.Datasource.Database)
 	db, err := sql.Open("postgres", connString)
 	fmt.Printf(connString)
 	if err != nil {
