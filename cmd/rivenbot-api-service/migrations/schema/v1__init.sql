@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS activity (
     label text NOT NULL,
     name_id bigint NOT NULL,
     difficulty_id bigint NOT NULL,
-    is_active boolean NOT NULL,
     is_worlds_first boolean,
     CONSTRAINT activity_name_fk FOREIGN KEY (name_id) REFERENCES activity_name (id),
     CONSTRAINT activity_difficulty_fk FOREIGN KEY (difficulty_id) REFERENCES activity_difficulty (id)

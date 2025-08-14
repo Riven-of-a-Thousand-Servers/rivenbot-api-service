@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"database/sql"
+	"embed"
 	"fmt"
 	"io"
 	"log"
@@ -11,10 +13,17 @@ import (
 	"rivenbot-api-service/pkg/config"
 
 	"github.com/deahtstroke/gsmt/pkg/dialect"
-	"github.com/deahtstroke/gsmt/pkg/migrate"
+	"github.com/deahtstroke/gsmt/pkg/migrator"
+	"github.com/deahtstroke/gsmt/pkg/store"
 
 	_ "github.com/lib/pq"
 )
+
+//go:embed migrations/schema
+var schema embed.FS
+
+//go:embed migrations/data
+var data embed.FS
 
 func main() {
 	configPath := os.Getenv("CONFIG_PATH")
@@ -26,19 +35,22 @@ func main() {
 		log.Panicf("Error parsing app configuration: %v", err)
 	}
 
-	url := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		appconfig.Datasource.Host, appconfig.Datasource.Port, appconfig.Datasource.Username, appconfig.Datasource.Password, appconfig.Datasource.Database)
-	db, err := sql.Open("postgres", url)
+	connString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
+		// url := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		appconfig.Datasource.Username, appconfig.Datasource.Password, appconfig.Datasource.Host, appconfig.Datasource.Port, appconfig.Datasource.Database)
+	db, err := sql.Open("postgres", connString)
+	fmt.Printf(connString)
 	if err != nil {
 		log.Panicf("Error opening connection to database: %v", err)
 	}
 
-	migrator, err := migrate.New(db, migrate.WithDialect(dialect.NewPostgresDialect()))
-	if err != nil {
-		log.Panicf("Error creating migrator: %v", err)
-	}
+	migrator, err := migrator.NewMigrator(migrator.MigratorOpts{
+		Schema: schema,
+		Data:   data,
+		Store:  store.NewSQLStore(db, dialect.Postgres()),
+	})
 
-	err = migrator.ApplyMigrations()
+	err = migrator.ApplyMigrations(context.Background())
 	if err != nil {
 		log.Panicf("Error applying migrations: %v", err)
 	}
@@ -46,10 +58,11 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/healthcheck", func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("Received healthcheck probe. Status: OK")
 		w.WriteHeader(http.StatusOK)
 		io.WriteString(w, "Ready")
 	})
 
-	log.Printf("Ready to receive requests on port: 8083")
-	log.Fatal(http.ListenAndServe(":8083", mux))
+	log.Printf("Ready to receive requests on port: 8080")
+	log.Fatal(http.ListenAndServe(":8080", mux))
 }

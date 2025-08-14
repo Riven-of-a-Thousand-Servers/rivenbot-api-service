@@ -9,12 +9,15 @@ COPY . .
 
 RUN go mod tidy && go build -o rivenbot-api-service ./cmd/rivenbot-api-service/main.go
 
-FROM alpine:latest
+# ----- Final Stage -----
+FROM alpine:3.22.0
 
 RUN apk add --no-cache curl
 WORKDIR /root/
 
 COPY --from=builder /app/rivenbot-api-service .
+COPY --from=builder /app/config ./config
+
 EXPOSE 8080
 
-ENTRYPOINT ["/root/rivenbot-api-service"]
+ENTRYPOINT ["./rivenbot-api-service"]
